@@ -15,9 +15,9 @@ public static int GetGCD(int a, int b) {
 	}
 ```
 
-![image-20200505101320071](/home/inho/.config/Typora/typora-user-images/image-20200505101320071.png)
 
 
+![image](https://user-images.githubusercontent.com/28773553/81062827-aa252b00-8f11-11ea-89a4-115c77554443.png)
 
 lcm을 구하는 방법은 gcd를 이용하면 아주 간단해진다.
 
