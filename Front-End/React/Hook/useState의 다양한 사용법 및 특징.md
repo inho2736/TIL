@@ -266,7 +266,11 @@ function increment() {
 
 
 
-updater라는 개념도 있던데 다음기회에 더 자세히 알아보겠다.
+다르게 사용하는 예제도 있던데 다음기회에 더 자세히 알아보겠다.
 
 
+
+참고한 문서 : https://jaeyeophan.github.io/2018/01/02/React-tips-for-beginners/
+
+[https://medium.com/wasd/setstate-%ED%8C%8C%ED%97%A4%EC%B9%98%EA%B8%B0-28b207fc81df](https://medium.com/wasd/setstate-파헤치기-28b207fc81df)
 
