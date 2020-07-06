@@ -188,6 +188,10 @@ function LoginForm() {
 
 
 
+### setState의 비동기성
+
+
+
 요번에 간단한 투두리스트를 만들면서 state로 array를 쓰게 되었다.
 
 그리고 간간히 setState 이후의 state를 확인하고싶어서, setState 바로 다음에 
@@ -267,6 +271,57 @@ function increment() {
 
 
 다르게 사용하는 예제도 있던데 다음기회에 더 자세히 알아보겠다.
+
+
+
+### setState 쓰면 자주 나오는 Error
+
+Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent **infinite loops**.
+
+ 
+
+인피니트 루프를 보면 잠시 이성을 상실할 수 있으나,,
+
+보통 이 문제는 
+
+```html
+<Button outline color="danger" onClick={deleteList(key)}>
+	Delete
+</Button>
+```
+
+요런 부분때문에 생긴다. 
+
+onClick에는 콜백 함수를 넣어줘야하지 함수를 호출해버리면 안된다.
+
+
+
+만약 위와 같이 함수를 호출해 버리면(특히 setState처럼 렌더링을 부르는 함수)
+
+렌더링 되면서 저 문법때문에 함수 호출 -> 함수 내부에서 setState 작동으로 다시 렌더링 ->
+
+그 렌더링으로 또 저 문법때문에 함수 호출,,,,,
+
+대환장 파티가 된다.
+
+
+
+일반 함수의 경우 그냥 함수명만 쓰면 콜백함수니까, 인자가 있는 함수를 쓸 때 아무렇지 않게 저렇게 호출해버려서 나오는 게 대부분이다.
+
+```html
+<Button
+    outline color="danger"
+    onClick={() => {           
+            deleteList(num);
+        }
+    }>    
+    Delete
+</Button>
+```
+
+그땐 꼭 정신차리고 이렇게 쓰자. 
+
+
 
 
 
