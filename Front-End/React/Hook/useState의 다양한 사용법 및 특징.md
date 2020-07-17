@@ -323,6 +323,59 @@ onClick에는 콜백 함수를 넣어줘야하지 함수를 호출해버리면 �
 
 
 
+이벤트 핸들러에 바로 setState를 넣는 경우와 마찬가지로 useEffect에 setState를 넣을 때도 저 오류가 생긴다.
+
+가령
+
+
+
+```javascript
+useEffect(() => {    
+    setMovie(getMovies());
+  }, [role, region, stack, movie]);
+  const getMovies = async () => {
+    const {
+      data: {
+        data: { movies }
+      }
+    } = await axios.get(
+      "https://yts-proxy.now.sh/list_movies.json?sort_by=rating"
+    );
+
+    return movies;
+    
+  };
+```
+
+
+
+이렇게 useEffect에 setMovie가 들어가면 useEffect의 변경 반영요소 괄호([ ]) 에 movie가 자동적으로 들어간다.
+
+그러면 처음 렌더링 시 setMovie가 가동하여 movie를 바꾸고, movie가 변화했으므로 다시 useEffect가 실행되어 내부의 setMovie가 가동된다. 이렇게 무한루프를 도는 것이다.
+
+
+
+그래서 setState는 안에 직접 쓰면 안되고
+
+```javascript
+useEffect(() => {
+    getMovies();
+  }, [role, region, stack]);
+  const getMovies = async () => {
+    const {
+      data: {
+        data: { movies }
+      }
+    } = await axios.get(
+      "https://yts-proxy.now.sh/list_movies.json?sort_by=rating"
+    );
+
+    setMovie(movies);
+  };
+```
+
+이렇게 밖으로 빼서 썼다.
+
 
 
 참고한 문서 : https://jaeyeophan.github.io/2018/01/02/React-tips-for-beginners/
