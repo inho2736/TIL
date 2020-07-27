@@ -14,61 +14,64 @@ useEffect 는 함수 컴포넌트에서 side effect(데이터 가져오기, 수�
 
 1.  **빈 deps를 가진 useEffect**
 
+
+
+      ```javascript
+        useEffect(() => {
+          console.log('컴포넌트가 화면에 나타남');    
+        }, []);
+      ```
+
+      이 경우는 컴포넌트가 마운트 될 때, 앞의 함수가 수행된다. 
+
+      여기에 앞 함수에 return 을 넣으면 언마운트 될 때 return 된 함수가 수행된다.
+
+      ```javascript
+       useEffect(() => {
+          console.log('1. 마운트');
+          return () => {
+              console.log('1. 언마운트')
+          }
+        }, []);
+      ```
+
+      딱 해당 컴포넌트가 마운트 될 때 와 언마운트 될 때만 정직하게 나와서 가장 단순하다.
+
+
+
+
+
+2.  **deps가 없는 useEffect** 
+
+
    
 
-   ```javascript
-     useEffect(() => {
-       console.log('컴포넌트가 화면에 나타남');    
-     }, []);
-   ```
+      ```javascript
+       useEffect(() => {
+          console.log('컴포넌트가 화면에 나타남');    
+        });
+      ```
 
-   이 경우는 컴포넌트가 마운트 될 때, 앞의 함수가 수행된다. 
+      이 경우는 컴포넌트가 리렌더링 될때마다 수행된다.  
 
-   여기에 앞 함수에 return 을 넣으면 언마운트 될 때 return 된 함수가 수행된다.
+      마운트는 기본 ,,,내부 state가 변화 할 때마다 매번~ 수행된다.
 
-   ```javascript
-    useEffect(() => {
-       console.log('1. 마운트');
-       return () => {
-           console.log('1. 언마운트')
-       }
-     }, []);
-   ```
+      ```javascript
+       useEffect(() => {
+          console.log('1111'); 
+          return () => {
+              console.log('2222')
+          }
+        });
+      ```
 
-   딱 해당 컴포넌트가 마운트 될 때 와 언마운트 될 때만 정직하게 나와서 가장 단순하다.
-
-
-
-
-
-2.  **deps가 없는 useEffect**
-
-   
-
-   ```javascript
-    useEffect(() => {
-       console.log('컴포넌트가 화면에 나타남');    
-     });
-   ```
-
-   이 경우는 컴포넌트가 리렌더링 될때마다 수행된다.
-
-   마운트는 기본 ,,,내부 state가 변화 할 때마다 매번~ 수행된다.
-
-   ```javascript
-    useEffect(() => {
-       console.log('1111'); 
-       return () => {
-           console.log('2222')
-       }
-     });
-   ```
-
-   이렇게 쓰면 뭘 하더라도 무한으로 생성되는 콘솔로그들을 볼 수 있다.
+      이렇게 쓰면 뭘 하더라도 무한으로 생성되는 콘솔로그들을 볼 수 있다.
+      
+           
 
 
 
-​		특히 부모컴포넌트 안에서   useState를 쓰고 그 자식 컴포넌트에서 저 useEffect를 쓰면, (부모가 리렌더링 하면 자식도 리렌더링 하므로) 부모 값이 바뀔 때 + 자식 값이 바뀔 때 가 혼합되어 난리가 날 수 있다.
+      특히 부모컴포넌트 안에서   useState를 쓰고 그 자식 컴포넌트에서 저 useEffect를 쓰면, (부모가 리렌더링 하면 자식도 리렌더링 하므로) 부모 값이 바뀔 때 + 자식 값이 바뀔 때 가 혼합되어 난리가 날 수 있다.
 
 
 
