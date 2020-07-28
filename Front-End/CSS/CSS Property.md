@@ -331,25 +331,313 @@ box-sizing 속성을 border-box로 지정 (원래는 content-box)하면 테두�
 
 #### 4. 마진 겹침 현상
 
+마진겹침(margin-collapsing) 현상은 상하 마진값이 어떤 상황에서 사라지는 현상을 의미한다.
 
+
+
+현상1
+
+```html
+<style>
+    h1{
+        border:1px solid red;
+        margin:100px;
+    }
+</style>
+<body>
+    <h1>Hello world</h1>
+    <h1>Hello world</h1>
+</body>
+```
+
+이렇게 하면 이론적으로는 각 h1태그 사이의 거리가 200px가 되어야 정상인데, 실제로는 100px이 됨. 
+
+두 엘리먼트의 마진이 겹쳐서 저런 현상이 생기는 것이고, 두 엘리먼트의 마진값이 다르다면 큰 쪽을 기준으로 거리가 형성됨.
+
+
+
+현상2
+
+```html
+<style>
+    #parent{
+        /* border:1px solid tomato;*/
+        margin-top:100px;
+    }
+    #child{
+        background-color: powderblue;
+        margin-top:50px;
+    }
+</style>
+
+<div id="parent">
+    <div id="child">
+        Hello world
+    </div>
+</div>
+```
+
+부모와 그 자식이 둘다 각자 마진값을 가지고 있는 경우
+
+부모태그가 시각적으로 효과가 없는 투명한 상태가 되면( 위 코드에서 border가 주석처리 될 때) 자식 태그와 마진값이 합쳐짐(더 큰쪽 기준으로 거리 형성)
+
+
+
+현상3
+
+later..
 
 
 
 #### 5. 포지션
 
+엘리먼트의 위치를 지정하는 4가지 방법
+
+- static
+- relative
+- absolute
+- fixed
+
+
+
+static vs relative
+
+```html
+<style>
+    html{border:1px solid gray;}
+    div{
+        border:5px solid tomato;
+        margin:10px;
+    }
+    #me{
+        position: relative;
+        left:100px;
+        top:100px;
+    }
+</style>
+
+<div id="other">other</div>
+<div id="parent">
+    parent
+    <div id="me">me</div>
+</div>
+```
+
+position 안썼으면 default 값으로 static 이 들어감.
+
+부모 엘리먼트 기준으로 위치를 옮기고 싶다 (left, top 등의 offset 사용)면 position을 relative로
+
+
+
+absolute
+
+```html
+<style>
+    #parent, #other, #grand{
+        border:5px solid tomato;
+    }
+    #grand{
+        position: relative;
+    }
+    #me{
+        background-color: black;
+        color:white;
+        position: absolute;
+        left:0;
+        top:0;
+    }
+</style>
+
+<div id="other">other</div>
+<div id="grand">
+    grand
+    <div id="parent">
+        parent
+        <div id="me">me</div>
+    </div>
+</div>
+```
+
+absolute는 부모엘리먼트 기준 말고, html 엘리먼트 기준으로 위치를 옮기고 싶을 때 사용한다. 
+
+(정확히는 조상 엘리먼트들 중에서 static이 아닌 다른 포지션을 가지고 있는 엘리먼트를 기준으로 한다.)
+
+
+
+```css
+position: absolute;
+left:0;
+top:0;
+```
+
+이렇게 쓰면 화면 최상단 왼쪽에 챡 붙는다.
+
+하지만 여기서 left와 top을 생략하면 부모 엘리먼트 기준의 0, 0 이 되는 위치의 left와 top값으로 초기화 되어, 0일 때와는 다른 위치를 가진다.
+
+
+
+position이 absolute로 지정되는 순간 부모 엘리먼트와의 링크가 끊긴다.  그래서 부모의 border를 보면 자식이 없는것처럼 해당 엘리먼트를 감싸지 않는다. 
+
+
+
+마찬가지로 자기 자신도 부모를 잃어 width와 height를 지정하지 않으면 딱 자기 contents 만큼의 부피만 가지게 된다.
+
+
+
+fixed 
+
+```html
+<style>
+    body{
+        padding-top:30px;
+    }
+    #parent, #other{
+        border:5px solid tomato;
+    }
+    #large{
+        height:10000px;
+        background-color: tomato;
+    }
+    #me{
+        background-color: black;
+        color:white;
+        position: fixed;
+        left:0;
+        top:0;
+        text-align: center;
+    }
+</style>
+<div id="other">other</div>
+<div id="parent">
+    parent
+    <div id="me">me</div>
+</div>
+<div id="large">large</div>
+```
+
+fixed는 스크롤에 관계없이 화면에 위치할 수 있다.
+
+또한 fixed는 부모와의 관계까 끊기는 현상에서 absolute와 아주 비슷하다.
+
+
+
 #### 6. flex
 
-later~
+later,,,
 
 #### 7. media query
 
-later~
+later,,,
 
 #### 8. float
 
+
+
+Float는 편집 디자인에서 이미지를 삽화로 삽입할 때 사용하는 기법이다. 
+
+```html
+<style>
+    img{
+        width:300px;
+        float:left;
+        margin:20px;
+    }
+    p{
+        border:1px solid gray;
+    }
+</style>
+
+<img src="sample.mt.jpg" alt="">
+<p>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate minus, obcaecati quia eaque perspiciatis! Vero cum libero architecto. Odit, et. Totam expedita
+</p>
+<p style="clear:both;">
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate minus, obcaecati quia eaque perspiciatis! Vero cum libero architecto. Odit, et. Totam expedita Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate minus, obcaecati quia eaque perspiciatis! Vero cum libero architecto. Odit, et. Totam expedita Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptate minus, obcaecati quia eaque perspiciatis! Vero cum libero architecto. Odit, et. Totam expedita
+</p>
+```
+
+이렇게 쓰면 첫번째 p태그는 이미지를 피해서 위치하고, 두번째 p태그 clear 속성을 가지기 때문에 float를 무시해 위치한다.
+
+![image-20200728143021522](/home/inho/.config/Typora/typora-user-images/image-20200728143021522.png)
+
+
+
+또한 레이아웃을 잡을 때도 사용하기도 한다.
+
+자세한 사항은 강의 참고
+
+```html
+<style>
+    *{
+        box-sizing:border-box;
+    }
+    .container{
+        width:540px;
+        border:1px solid gray;
+        margin:auto;
+    }
+    header{
+        border-bottom: 1px solid gray;
+    }
+    nav{
+        float:left;
+        width:120px;
+        border-right:1px solid gray;
+    }
+    article{
+        float:left;
+        width:300px;
+        border-left:1px solid gray;
+        border-right:1px solid gray;
+        margin-left:-1px;
+    }
+    aside{
+        float:left;
+        width:120px;
+        border-left:1px solid gray;
+        margin-left:-1px;
+    }
+    footer{
+        clear:both;
+        border-top:1px solid gray;
+        text-align: center;
+        padding:20px;
+    }
+</style>
+
+<div class="container">
+    <header>
+        <h1>
+            CSS
+        </h1>
+    </header>
+    <nav>
+        <ul>
+            <li>position</li>
+            <li>float</li>
+            <li>flex</li>
+        </ul>  
+    </nav>
+    <article>
+        <h2>float</h2>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit quae earum enim ab distinctio corrupti eius reprehenderit non, rerum ut nisi autem cum sint perferendis eum id velit, molestias nesciunt. Ullam dignissimos consequuntur explicabo id voluptas vel deleniti nesciunt veritatis iusto commodi, laudantium cumque vero deserunt laboriosam. Ea, quia est?
+    </article>
+    <aside>
+        ad  
+    </aside>
+    <footer>
+        copyleft  
+    </footer>
+</div>
+```
+
+
+
+
+
 #### 9. 다단 (muti column)
 
-later~
+later,,,
 
 
 
